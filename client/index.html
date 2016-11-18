@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chatterbox</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Varela+Round" rel="stylesheet">
+    <!-- dependencies -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script>
+      // YOU DO NOT NEED TO EDIT THIS CODE
+      if (!/(&|\?)username=/.test(window.location.search)) {
+        var newSearch = window.location.search;
+        if (newSearch !== '' & newSearch !== '?') {
+          newSearch += '&';
+        }
+        newSearch += 'username=' + (prompt('What is your name?') || 'anonymous');
+        window.location.search = newSearch;
+      }
+    </script>
+    <!-- your scripts -->
+    <script src="env/config.js"></script>
+    <script src="scripts/app.js"></script>
+  </head>
+  <body>
+    <nav class="topBar" id='navBar'></nav>
+    <ul class='friendList' style="padding-left: 0px">Friend List</ul>
+    <div id="main">
+      <h1>chatterBox</h1>
+      <span id='currentUser'></span>
+      <!-- Your HTML goes here! -->
+      <p>Rooms
+        <select id='roomSelect' onchange='app.fetchByRoom("https://api.parse.com/1/classes/messages", this.selectedIndex)'></select>
+      </p>
+      <form>
+        Room: <input id = 'newChatRoom' type="text">
+      </form>
+      <a class="addRoom btn" href="#">Add a Room</a>
+      <!-- <button class='addRoom'>Add a Room</button> -->
+      <form class='msgForm'>
+        Message: <input id='userMsg' type='text'>
+      </form>
+      <a class="submit btn" href="#">Submit</a>
+      <!-- <button class='submit'>Submit</button> -->
+    </div>
+    <div id="chats"></div>
+  </body>
+</html>
+
+<!-- app.fetchByRoom("https://api.parse.com/1/classes/messages", this.selectedIndex) -->
