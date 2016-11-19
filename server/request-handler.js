@@ -11,7 +11,8 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-var messages = [];
+//var randtoken = require('rand-token');
+var messages = [{username: 'anonymous', text: 'empty', roomname: 'lobby'}];
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -64,11 +65,12 @@ var requestHandler = function(request, response) {
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  if (request.method === 'GET' && request.url === '/classes/messages') {
+  if ((request.method === 'GET' || request.method === 'OPTIONS') && request.url === '/classes/messages') {
     statusCode = 200;
     response.writeHead(statusCode, headers);
     response.end(JSON.stringify(obj));
   } else if (request.method === 'POST' && request.url === '/classes/messages') {
+    //var token = randtoken.generate(10);
     statusCode = 201;
     var messageBody = [];
     request.on('data', function(chunk) {
@@ -76,7 +78,10 @@ var requestHandler = function(request, response) {
     });
     request.on('end', function() {
       messageBody = messageBody.toString();
-      messages.push(JSON.parse(messageBody));
+      messageBody = JSON.parse(messageBody);
+      //messageBody.ObjectID = token;
+      messages.unshift(messageBody);
+      //console.log(messages);
     });
     response.writeHead(statusCode, headers);
     response.end();

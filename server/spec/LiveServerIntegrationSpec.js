@@ -33,6 +33,26 @@ describe('server', function() {
     });
   });
 
+  it('should send an object containing a `results` array that contains objects', function(done) {
+    request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+      var parsedBody = JSON.parse(body);
+      expect(parsedBody).to.be.an('object');
+      expect(parsedBody.results[0]).to.be.an('object');
+      done();
+    });
+  });
+
+  it('should send an object containing a `results` array that contains objects with a username string, text string, and roomname string', function(done) {
+    request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+      var parsedBody = JSON.parse(body);
+      expect(parsedBody).to.be.an('object');
+      expect(parsedBody.results[0].username).to.be.an('string');
+      expect(parsedBody.results[0].text).to.be.an('string');
+      expect(parsedBody.results[0].roomname).to.be.an('string');
+      done();
+    });
+  });
+
   it('should accept POST requests to /classes/messages', function(done) {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
@@ -47,7 +67,32 @@ describe('server', function() {
     });
   });
 
-  it('should respond with messages that were previously posted', function(done) {
+  it('Should preserve order of posts', function(done) {
+    var requestParams = {method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+      json: {
+        username: 'Jono',
+        message: 'Do my bidding!'}
+    };
+    var requestParams2 = {method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+      json: {
+        username: 'Dono',
+        message: 'Jo my bidding!'}
+    };
+
+    request(requestParams, function(error, response, body) {
+      done();
+    });
+    request(requestParams2, function(error, response, body) {
+      var messages = JSON.parse(body).results;
+      expect(messages[0].username).to.equal('Jono');
+      expect(messages[1].username).to.equal('Dono');
+      done();
+    });
+  });
+
+  it('Should respond with messages that were previously posted', function(done) {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
       json: {
