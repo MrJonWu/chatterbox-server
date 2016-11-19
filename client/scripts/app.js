@@ -1,5 +1,5 @@
 var App = function() {
-  var server = 'https://api.parse.com/1/classes/messages';
+  var server = 'http://127.0.0.1:3000/classes/messages';
   window.friendsObj = {};
 };
 /*
@@ -9,7 +9,7 @@ var App = function() {
 */
 App.prototype.init = function() {
   console.log('INITIALIZE STUFF');
-  var parseServer = 'https://api.parse.com/1/classes/messages';
+  var parseServer = 'http://127.0.0.1:3000/classes/messages';
   this.fetch(parseServer);
   this.clearRoom();
   this.fetchRooms(parseServer);
@@ -24,13 +24,13 @@ App.prototype.send = function(message, roomIndex) {
   var that = this;
   console.log(message);
   $.ajax({
-    url: 'https://api.parse.com/1/classes/messages',
+    url: 'http://127.0.0.1:3000/classes/messages',
     type: 'POST',
     data: JSON.stringify(message),
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message sent', data);
-      that.fetchByRoom('https://api.parse.com/1/classes/messages', roomIndex);
+      that.fetchByRoom('http://127.0.0.1:3000/classes/messages', roomIndex);
     },
     error: function (data) {
       console.error('chatterbox: Failed to send message', data);
@@ -221,7 +221,7 @@ $(document).ready(function() {
   window.setInterval(function() {
     var roomIndex = document.getElementById('roomSelect').selectedIndex;
     if (!window.userTag) {
-      app.fetchByRoom('https://api.parse.com/1/classes/messages', roomIndex);
+      app.fetchByRoom('http://127.0.0.1:3000/classes/messages', roomIndex);
     }
   }, 2000);
 
@@ -243,7 +243,7 @@ App.prototype.addToFriendList = function() {
     $('.friendList').append('<li class="friends"><a href="#">' + this.innerHTML + '</a></li>');
     $('a[href="#"]').click(function() {
       window.userTag = true;
-      app.fetchByUsername('https://api.parse.com/1/classes/messages', this.innerHTML);
+      app.fetchByUsername('http://127.0.0.1:3000/classes/messages', this.innerHTML);
     });
   }
   //$('.friendList').append('<li onclick="app.fetchByUsername(' + 'https://api.parse.com/1/classes/messages,' + this.innerHTML + ')">' + this.innerHTML + '</li>');
